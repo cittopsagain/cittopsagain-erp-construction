@@ -1,0 +1,89 @@
+# Configuration optimized for 8GB RAM and 2 vCPU
+services:
+  # Nginx Service
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "70:80"
+    volumes:
+      - ./www:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+        reservations:
+          memory: 64M
+
+  # PHP Service
+  php:
+    build:
+      context: ./php
+    volumes:
+      - ./www:/var/www/html
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 1G
+        reservations:
+          memory: 256M
+
+  # Java Service
+  java:
+    build:
+      context: ./java
+    volumes:
+      - ./java-app:/app
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 2G
+        reservations:
+          memory: 512M
+
+  # MariaDB Service (LTS - 10.11 is a current LTS)
+  mariadb:
+    # image: mariadb:10.11
+    image: mariadb:10.11
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root_password
+      MARIADB_DATABASE: app_db
+      MARIADB_USER: app_user
+      MARIADB_PASSWORD: app_password
+    volumes:
+      - ./mariadb/data:/var/lib/mysql
+      - ./mariadb/backups:/backups
+    ports:
+      - "3308:3306"
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 2G
+        reservations:
+          memory: 1G
+    command:
+      - --innodb-buffer-pool-size=1G
+      - --innodb-log-file-size=256M
+      - --max-connections=100
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mariadb_data:

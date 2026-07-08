@@ -1,0 +1,33 @@
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Docker and Database Data
+mariadb/data/
+mariadb/data_working/
+mariadb/data_backup/
+mariadb/data_backup1/
+mariadb/backups/
+mariadb/ib_logfile0
+
+# Logs
+*.log
+www/Logs/
+
+# Database dumps/backups
+*.sql
+!rbac_schema.sql
+!composition_templates.sql
+!installation_methods.sql
+!inv_item_types.sql
+!inv_material_groups.sql
+!inventory_item_categories.sql
+!project_trades.sql
+!project_types.sql
+!sales_unit.sql
+
+# OS files
+Thumbs.db
