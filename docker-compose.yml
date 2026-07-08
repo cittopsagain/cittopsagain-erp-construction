@@ -77,8 +77,9 @@ services:
         reservations:
           memory: 1G
     command:
-      - --innodb-buffer-pool-size=1G
-      - --innodb-log-file-size=256M
+      - --innodb-buffer-pool-size=512M
+      - --innodb-buffer-pool-size-max=512M
+      - --innodb-log-file-size=128M
       - --max-connections=100
 
 networks:
