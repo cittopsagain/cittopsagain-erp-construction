@@ -1,7 +1,7 @@
 <?php
 return [
     'display_name' => 'Departments',
-    'parent' => 'Masterlist',
+    'parent' => 'Organization',
     'iconCls' => 'x-fa fa-sitemap',
     'permissions' => [
         'module' => [

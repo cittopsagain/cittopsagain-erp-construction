@@ -1,7 +1,7 @@
 <?php
 return [
     'display_name' => 'Holiday Calendar',
-    'parent' => 'Masterlist',
+    'parent' => 'Organization',
     'iconCls' => 'x-fa fa-calendar',
     'permissions' => [
         'module' => [

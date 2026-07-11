@@ -42,13 +42,23 @@ class Controller
     }
 
     /**
+     * Check if the request is an AJAX request.
+     *
+     * @return bool
+     */
+    public function isAjax()
+    {
+        return (isset($_POST['ajax']) || isset($_GET['ajax']) || (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'));
+    }
+
+    /**
      * Check authentication and redirect to login if not authenticated.
      * Excludes the Auth application.
      */
     public function checkAuth($application, $module = null, $action = null)
     {
         if ($application !== 'Auth' && !$this->isLoggedIn()) {
-            if (isset($_POST['ajax']) || (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+            if ($this->isAjax()) {
                 $this->json(['success' => false, 'message' => 'Session expired. Please login again.', 'session_expired' => true]);
                 exit;
             }
@@ -69,7 +79,7 @@ class Controller
         // RBAC check
         if ($application !== 'Auth' && $this->isLoggedIn()) {
             if (!$this->hasPermission($application, $module, $action)) {
-                if (isset($_POST['ajax']) || (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')) {
+                if ($this->isAjax()) {
                     $this->json(['success' => false, 'message' => 'Access Denied. You do not have permission to perform this action.']);
                     exit;
                 } else {
@@ -204,6 +214,8 @@ class Controller
         $icons = [
             'Masterlist' => 'x-fa fa-list',
             'Security' => 'x-fa fa-lock',
+            'Organization' => 'x-fa fa-sitemap',
+            'Employee Management' => 'x-fa fa-list',
             'Quotations' => 'x-fa fa-file-text-o'
         ];
 
@@ -359,11 +371,7 @@ class Controller
             die("Invalid view name.");
         }
 
-        // Check if it's an AJAX request
-        $isAjax = (isset($_GET['ajax']) && $_GET['ajax'] == 1) ||
-            (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
-
-        if ($isAjax) {
+        if ($this->isAjax()) {
             // Capture view output
             ob_start();
             $viewPath = 'Applications/' . $application . '/Modules/' . $module . '/Views/' . $view . '.php';

@@ -103,4 +103,14 @@ class Main extends Controller
             $this->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
+
+    public function all()
+    {
+        $model = $this->model('Inventory', 'Items', 'Items');
+        $items = $model->getAll();
+        $this->json([
+            'success' => true,
+            'data' => $items
+        ]);
+    }
 }

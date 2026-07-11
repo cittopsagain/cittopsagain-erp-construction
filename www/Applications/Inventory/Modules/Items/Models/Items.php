@@ -189,4 +189,24 @@ class Items extends Model
             throw $e;
         }
     }
+
+    public function getAll()
+    {
+        try {
+            $sql = "SELECT i.*, c.item_cat_name, u.unit_code, u.description AS unit_description,
+                           mg.group_name AS material_group_name, it.type_name AS item_type_name
+                    FROM inv_items i
+                    LEFT JOIN inv_item_categories c ON i.item_cat = c.item_cat_id
+                    LEFT JOIN sales_unit u ON i.unit = u.id
+                    LEFT JOIN inv_material_groups mg ON i.material_group = mg.id
+                    LEFT JOIN inv_item_types it ON i.item_type = it.id
+                    ORDER BY i.item_code ASC";
+            $stmt = $this->db->query($sql);
+            return $stmt->fetchAll();
+        } catch (\PDOException $e) {
+            error_log($e->getMessage());
+            \Core\Logger::logException($e);
+            return [];
+        }
+    }
 }

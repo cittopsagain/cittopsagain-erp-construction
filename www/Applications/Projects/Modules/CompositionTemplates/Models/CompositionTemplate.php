@@ -11,10 +11,12 @@ class CompositionTemplate extends Model
     public function getPaged($start, $limit)
     {
         try {
-            $sql = "SELECT t.*, i.installation_method_name, it.type_name as item_type_name
+            $sql = "SELECT t.*, i.installation_method_name, pt.description as trade_name, pwp.description as phase_name, ps.description as system_name
                     FROM {$this->table} t
                     LEFT JOIN installation_methods i ON t.installation_method_id = i.installation_method_id
-                    LEFT JOIN inv_item_types it ON t.item_type_id = it.id
+                    LEFT JOIN project_trades pt ON t.trade_id = pt.trade_id
+                    LEFT JOIN project_work_phases pwp ON t.phase_id = pwp.phase_id
+                    LEFT JOIN project_systems ps ON t.system_id = ps.system_id
                     ORDER BY t.id DESC 
                     LIMIT :limit OFFSET :offset";
             $stmt = $this->db->prepare($sql);
@@ -69,8 +71,8 @@ class CompositionTemplate extends Model
                 }
             }
 
-            $sql = "INSERT INTO {$this->table} (template_code, template_name, installation_method_id, item_type_id, created_by) 
-                    VALUES (:template_code, :template_name, :installation_method_id, :item_type_id, :created_by)";
+            $sql = "INSERT INTO {$this->table} (template_code, template_name, installation_method_id, trade_id, phase_id, system_id, created_by) 
+                    VALUES (:template_code, :template_name, :installation_method_id, :trade_id, :phase_id, :system_id, :created_by)";
 
             $stmt = $this->db->prepare($sql);
 
@@ -78,7 +80,9 @@ class CompositionTemplate extends Model
                 ':template_code' => $data['template_code'] ?? null,
                 ':template_name' => $data['template_name'] ?? null,
                 ':installation_method_id' => $data['installation_method_id'] ?? null,
-                ':item_type_id' => $data['item_type_id'] ?? null,
+                ':trade_id' => $data['trade_id'] ?? null,
+                ':phase_id' => $data['phase_id'] ?? null,
+                ':system_id' => $data['system_id'] ?? null,
                 ':created_by' => $this->getCurrentUserId()
             ]);
 
@@ -110,7 +114,9 @@ class CompositionTemplate extends Model
                     SET template_code = :template_code,
                         template_name = :template_name,
                         installation_method_id = :installation_method_id,
-                        item_type_id = :item_type_id,
+                        trade_id = :trade_id,
+                        phase_id = :phase_id,
+                        system_id = :system_id,
                         updated_at = NOW(),
                         updated_by = :modified_by
                     WHERE id = :id";
@@ -121,7 +127,9 @@ class CompositionTemplate extends Model
                 ':template_code' => $data['template_code'] ?? null,
                 ':template_name' => $data['template_name'] ?? null,
                 ':installation_method_id' => $data['installation_method_id'] ?? null,
-                ':item_type_id' => $data['item_type_id'] ?? null,
+                ':trade_id' => $data['trade_id'] ?? null,
+                ':phase_id' => $data['phase_id'] ?? null,
+                ':system_id' => $data['system_id'] ?? null,
                 ':modified_by' => $this->getCurrentUserId(),
                 ':id' => $data['id']
             ]);

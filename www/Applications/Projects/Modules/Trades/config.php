@@ -1,7 +1,7 @@
 <?php
 return [
     'display_name' => 'Trades',
-    'parent' => 'Masterlist',
+    'parent' => 'Engineering',
     'iconCls' => 'x-fa fa-briefcase',
     'permissions' => [
         'module' => [

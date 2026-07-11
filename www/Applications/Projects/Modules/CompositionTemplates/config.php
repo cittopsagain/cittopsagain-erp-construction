@@ -1,7 +1,7 @@
 <?php
 return [
     'display_name' => 'Composition Templates',
-    'parent' => 'Masterlist',
+    'parent' => 'Engineering',
     'iconCls' => 'x-fa fa-file-text-o',
     'permissions' => [
         'module' => [

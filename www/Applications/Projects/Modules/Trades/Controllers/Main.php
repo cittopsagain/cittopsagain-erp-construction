@@ -45,7 +45,8 @@ class Main extends Controller
 
         $requiredFields = [
             'trade_code' => 'Trade code',
-            'description' => 'Description'
+            'description' => 'Description',
+            'service_id' => 'Service'
         ];
 
         foreach ($requiredFields as $field => $label) {

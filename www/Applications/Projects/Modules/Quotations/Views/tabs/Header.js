@@ -48,7 +48,7 @@ Ext.define('App.view.quotations.tabs.Header', {
                         fields: ['client_code', 'client_name'],
                         proxy: {
                             type: 'ajax',
-                            url: '<?php echo rtrim(BASE_URL, '/'); ?>/Sales/Clients/Main/all',
+                            url: '<?php echo rtrim(BASE_URL, "/"); ?>/Sales/Clients/Main/all',
                             reader: {
                                 type: 'json',
                                 rootProperty: 'data'
@@ -67,13 +67,13 @@ Ext.define('App.view.quotations.tabs.Header', {
                 },
                 {
                     xtype: 'combobox',
-                    fieldLabel: 'Project Type',
-                    name: 'project_type_code',
+                    fieldLabel: 'Service',
+                    name: 'service_code',
                     store: {
-                        fields: ['type_code', 'description'],
+                        fields: ['service_code', 'description'],
                         proxy: {
                             type: 'ajax',
-                            url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/ProjectTypes/Main/all',
+                            url: '<?php echo rtrim(BASE_URL, "/"); ?>/Projects/Services/Main/all',
                             reader: {
                                 type: 'json',
                                 rootProperty: 'data'
@@ -81,7 +81,7 @@ Ext.define('App.view.quotations.tabs.Header', {
                         },
                         autoLoad: true
                     },
-                    valueField: 'type_code',
+                    valueField: 'service_code',
                     displayField: 'description',
                     queryMode: 'local',
                     matchFieldWidth: false,

@@ -1,7 +1,7 @@
 <?php
 return [
     'display_name' => 'Installation Methods',
-    'parent' => 'Masterlist',
+    'parent' => 'Engineering',
     'iconCls' => 'x-fa fa-list',
     'permissions' => [
         'module' => [

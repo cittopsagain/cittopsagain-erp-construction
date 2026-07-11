@@ -24,7 +24,7 @@ modularized into several files to improve maintainability and readability.
 3. **`form.js` (`App.view.quotations.Form`)**
     - **Purpose**: A modal window containing the detailed form for creating or updating a quotation.
     - **Components**:
-        - **Header Information**: General details like Client, Project Type, and Contact Person.
+        - **Header Information**: General details like Client, Service, and Contact Person.
         - **Quotation Details**: A grid for adding line items to the quotation.
         - **Terms & Conditions**: A section for specifying terms.
     - **Interaction**: It calls `App.view.quotations.ItemWindow` when a user wants to add an item to the Quotation
@@ -40,7 +40,7 @@ modularized into several files to improve maintainability and readability.
 To keep the interface clean, the quotation details are split into several tabs:
 
 1. **Header.js (`App.view.quotations.tabs.Header`)**
-    - Contains general information: Client, Project Name, Quotation Number, and Project Type.
+    - Contains general information: Client, Project Name, Quotation Number, and Service.
 
 2. **BOQ.js (`App.view.quotations.tabs.BOQ`)**
     - Main Bill of Quantities grid. Items added here are primary deliverables.

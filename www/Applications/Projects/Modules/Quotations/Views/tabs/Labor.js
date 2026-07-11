@@ -29,10 +29,10 @@ Ext.define('App.view.quotations.tabs.Labor', {
             editor: {
                 xtype: 'combobox',
                 store: {
-                    fields: ['name', 'description'],
+                    fields: ['pos_id', 'pos_name'],
                     proxy: {
                         type: 'ajax',
-                        url: '<?php echo rtrim(BASE_URL, '/'); ?>/Hr/JobTitle/Main/all',
+                        url: '<?php echo rtrim(BASE_URL, ' / '); ?>/Hr/JobPositions/Main/reportsTo',
                         reader: {
                             type: 'json',
                             rootProperty: 'data'
@@ -40,8 +40,8 @@ Ext.define('App.view.quotations.tabs.Labor', {
                     },
                     autoLoad: true
                 },
-                valueField: 'description',
-                displayField: 'description',
+                valueField: 'pos_name',
+                displayField: 'pos_name',
                 queryMode: 'remote',
                 allowBlank: false
             }

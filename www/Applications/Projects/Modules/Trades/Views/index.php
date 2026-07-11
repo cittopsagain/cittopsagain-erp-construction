@@ -8,7 +8,7 @@
         draggable: true,
         resizable: true,
         store: {
-            fields: ['trade_id', 'trade_code', 'description', 'long_description'],
+            fields: ['trade_id', 'trade_code', 'description', 'long_description', 'service_id', 'service_name', 'service_code'],
             pageSize: 25,
             proxy: {
                 type: 'ajax',
@@ -57,6 +57,43 @@
         columns: [
             {text: 'ID', dataIndex: 'trade_id', width: 50},
             {
+                text: 'Service',
+                dataIndex: 'service_id',
+                width: 150,
+                renderer: function (value, metaData, record) {
+                    return record.get('service_name') || record.get('service_code') || value;
+                },
+                editor: {
+                    xtype: 'combobox',
+                    store: {
+                        fields: ['service_id', 'description', 'service_code'],
+                        proxy: {
+                            type: 'ajax',
+                            url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/Services/Main/all',
+                            reader: {
+                                type: 'json',
+                                rootProperty: 'data'
+                            }
+                        },
+                        autoLoad: true
+                    },
+                    displayField: 'description',
+                    valueField: 'service_id',
+                    queryMode: 'local',
+                    allowBlank: false,
+                    forceSelection: true,
+                    listeners: {
+                        select: function (combo, record) {
+                            var gridRecord = this.up('grid').getSelectionModel().getSelection()[0];
+                            if (gridRecord) {
+                                gridRecord.set('service_name', record.get('description'));
+                                gridRecord.set('service_code', record.get('service_code'));
+                            }
+                        }
+                    }
+                }
+            },
+            {
                 text: 'Code',
                 dataIndex: 'trade_code',
                 width: 150,
@@ -102,7 +139,8 @@
                     var r = Ext.create(store.getModel(), {
                         trade_code: '',
                         description: '',
-                        long_description: ''
+                        long_description: '',
+                        service_id: ''
                     });
 
                     store.insert(0, r);

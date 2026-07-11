@@ -1,0 +1,17 @@
+# Disable directory browsing
+Options -MultiViews
+
+# Prevent direct access to Core and Applications directories
+RewriteRule ^(Core|Applications) - [F,L]
+
+# Enable the rewriting engine
+RewriteEngine On
+
+# If the requested filename is NOT a directory
+RewriteCond %{REQUEST_FILENAME} !-d
+# AND if the requested filename is NOT a file
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Route all other requests to index.php, passing the original path as a 'url' parameter
+# Example: /Hr/Dashboard -> index.php?url=Hr/Dashboard
+RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]

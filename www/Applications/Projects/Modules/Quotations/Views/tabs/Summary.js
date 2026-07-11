@@ -50,8 +50,8 @@ Ext.define('App.view.quotations.tabs.Summary', {
             itemId: 'sum_quotation_no'
         },
         {
-            fieldLabel: 'Project Type',
-            itemId: 'sum_project_type'
+            fieldLabel: 'Service',
+            itemId: 'sum_service'
         },
         {
             fieldLabel: 'Revision No',
@@ -211,7 +211,7 @@ Ext.define('App.view.quotations.tabs.Summary', {
                 if (headerTab) {
                     var headerForm = headerTab.getForm();
                     var clientCombo = headerForm.findField('client_code');
-                    var projectTypeCombo = headerForm.findField('project_type_code');
+                    var serviceCombo = headerForm.findField('service_code');
 
                     var sumClientName = tab.down('#sum_client_name');
                     if (sumClientName) {
@@ -228,9 +228,9 @@ Ext.define('App.view.quotations.tabs.Summary', {
                         sumQuotationNo.setValue(headerForm.findField('quot_ctrl_no').getValue() || 'NEW');
                     }
 
-                    var sumProjectType = tab.down('#sum_project_type');
-                    if (sumProjectType) {
-                        sumProjectType.setValue(projectTypeCombo ? projectTypeCombo.getRawValue() : '');
+                    var sumService = tab.down('#sum_service');
+                    if (sumService) {
+                        sumService.setValue(serviceCombo ? serviceCombo.getRawValue() : '');
                     }
 
                     // Revision No could be added to header if needed, but for now we use '0' as default

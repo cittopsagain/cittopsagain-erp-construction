@@ -12,6 +12,7 @@ mariadb/data_backup/
 mariadb/data_backup1/
 mariadb/backups/
 mariadb/ib_logfile0
+laravel-app
 
 # Logs
 *.log

@@ -30,8 +30,8 @@ class Quotations extends Model
             }
 
             $sql = "SELECT h.*, c.client_name, h.project_name, (
-                        SELECT description FROM project_types WHERE type_code = h.project_type_code
-                    ) AS project_type_desc
+                        SELECT description FROM project_services WHERE service_code = h.service_code
+                    ) AS service_desc
                     FROM sales_quotation_header h
                     LEFT JOIN sales_client c ON h.client_code = c.client_code
                     $whereClause
@@ -87,17 +87,17 @@ class Quotations extends Model
      * Get a specific quotation header by its ID.
      *
      * @param int $header_id The unique ID of the quotation header.
-     * @return array|false The header record with joined client and project type info, or false if not found.
+     * @return array|false The header record with joined client and service info, or false if not found.
      */
     public function getHeader($header_id)
     {
         try {
             $sql = "SELECT h.*, c.client_name, c.add1, c.add2, h.project_name, (
-                        SELECT description FROM project_types WHERE type_code = h.project_type_code
-                    ) AS project_type_desc,
+                        SELECT description FROM project_services WHERE service_code = h.service_code
+                    ) AS service_desc,
                     (
-                        SELECT long_description FROM project_types WHERE type_code = h.project_type_code
-                    ) AS project_type_long_desc,
+                        SELECT long_description FROM project_services WHERE service_code = h.service_code
+                    ) AS service_long_desc,
                     (
                         SELECT user_name FROM app_users u WHERE u.user_id = h.created_by
                     ) AS prepared_by
@@ -235,7 +235,7 @@ class Quotations extends Model
             if (isset($header['id']) && is_numeric($header['id'])) {
                 // Update existing quotation header
                 $sql = "UPDATE sales_quotation_header SET 
-                            project_type_code = :project_type_code,
+                            service_code = :service_code,
                             project_name = :project_name,
                             quot_ctrl_no = :quot_ctrl_no,
                             client_code = :client_code,
@@ -249,7 +249,7 @@ class Quotations extends Model
                         WHERE id = :id";
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute([
-                    ':project_type_code' => $header['project_type_code'],
+                    ':service_code' => $header['service_code'],
                     ':project_name' => $header['project_name'] ?? null,
                     ':quot_ctrl_no' => $header['quot_ctrl_no'],
                     ':client_code' => $header['client_code'],
@@ -283,11 +283,11 @@ class Quotations extends Model
                 }
 
                 // Insert new quotation header
-                $sql = "INSERT INTO sales_quotation_header (project_type_code, project_name, quot_ctrl_no, client_code, contact_person, terms, term_remarks, discount, remarks, status, created_by, buildings_data) 
-                        VALUES (:project_type_code, :project_name, :quot_ctrl_no, :client_code, :contact_person, :terms, :term_remarks, :discount, :remarks, :status, :created_by, :buildings_data)";
+                $sql = "INSERT INTO sales_quotation_header (service_code, project_name, quot_ctrl_no, client_code, contact_person, terms, term_remarks, discount, remarks, status, created_by, buildings_data) 
+                        VALUES (:service_code, :project_name, :quot_ctrl_no, :client_code, :contact_person, :terms, :term_remarks, :discount, :remarks, :status, :created_by, :buildings_data)";
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute([
-                    ':project_type_code' => $header['project_type_code'],
+                    ':service_code' => $header['service_code'],
                     ':project_name' => $header['project_name'] ?? null,
                     ':quot_ctrl_no' => $header['quot_ctrl_no'],
                     ':client_code' => $header['client_code'],

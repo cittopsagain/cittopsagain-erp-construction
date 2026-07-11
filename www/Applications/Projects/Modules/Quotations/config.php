@@ -1,8 +1,8 @@
 <?php
 return [
     'display_name' => 'Quotations',
-    'parent' => 'Quotations',
-    'iconCls' => 'x-fa fa-file-text-o',
+    'parent' => 'Operations',
+    'iconCls' => 'x-fa fa-list',
     'permissions' => [
         'module' => [
             [

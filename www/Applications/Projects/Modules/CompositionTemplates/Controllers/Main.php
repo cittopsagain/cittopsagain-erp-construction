@@ -14,8 +14,14 @@ class Main extends Controller
         $imModel = $this->model('Projects', 'InstallationMethods', 'InstallationMethods');
         $data['installation_methods'] = $imModel->getAll();
 
-        $itModel = $this->model('Inventory', 'ItemTypes', 'ItemType');
-        $data['item_types'] = $itModel->getAll();
+        $tradeModel = $this->model('Projects', 'Trades', 'Trades');
+        $data['trades'] = $tradeModel->getAll();
+
+        $phaseModel = $this->model('Projects', 'WorkPhases', 'WorkPhases');
+        $data['work_phases'] = $phaseModel->getAll();
+
+        $systemModel = $this->model('Projects', 'Systems', 'Systems');
+        $data['systems'] = $systemModel->getAll();
 
         $this->layout('Projects', 'CompositionTemplates', 'index', $data);
     }
@@ -43,7 +49,9 @@ class Main extends Controller
             'template_code' => 'Template code',
             'template_name' => 'Template name',
             'installation_method_id' => 'Installation method',
-            'item_type_id' => 'Item type'
+            'trade_id' => 'Trade',
+            'phase_id' => 'Work Phase',
+            'system_id' => 'System'
         ];
 
         foreach ($requiredFields as $field => $label) {
@@ -101,13 +109,14 @@ class Main extends Controller
     public function detailData()
     {
         $template_id = $_GET['template_id'] ?? null;
+        $type = $_GET['detail_type'] ?? null;
         if (!$template_id) {
             $this->json(['total' => 0, 'data' => []]);
             return;
         }
 
         $model = $this->model('Projects', 'CompositionTemplates', 'CompositionTemplateDetail');
-        $items = $model->getByTemplateId($template_id);
+        $items = $model->getByTemplateId($template_id, $type);
 
         $this->json([
             'total' => count($items),

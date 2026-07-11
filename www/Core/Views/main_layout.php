@@ -187,7 +187,7 @@
                     items: [
                         {
                             xtype: 'box',
-                            autoEl: {tag: 'p', html: 'Module content below'},
+                            autoEl: {tag: 'p', html: ''},
                             style: 'color: #666;',
                             margin: '0 0 20 0'
                         },

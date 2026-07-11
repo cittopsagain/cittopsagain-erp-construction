@@ -9,8 +9,10 @@ class Trades extends Model
     public function getPaged($start, $limit)
     {
         try {
-            $sql = "SELECT * FROM project_trades 
-                    ORDER BY trade_id DESC 
+            $sql = "SELECT t.*, s.description as service_name, s.service_code
+                    FROM project_trades t
+                    LEFT JOIN project_services s ON t.service_id = s.service_id
+                    ORDER BY t.trade_id DESC 
                     LIMIT :limit OFFSET :offset";
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':limit', (int)$limit, \PDO::PARAM_INT);
@@ -27,7 +29,11 @@ class Trades extends Model
     public function getAll()
     {
         try {
-            $stmt = $this->db->query("SELECT * FROM project_trades ORDER BY created_at DESC");
+            $sql = "SELECT t.*, s.description as service_name, s.service_code
+                    FROM project_trades t
+                    LEFT JOIN project_services s ON t.service_id = s.service_id
+                    ORDER BY t.created_at DESC";
+            $stmt = $this->db->query($sql);
             return $stmt->fetchAll();
         } catch (\PDOException $e) {
             error_log($e->getMessage());
@@ -51,7 +57,10 @@ class Trades extends Model
     public function getByCode($trade_code)
     {
         try {
-            $sql = "SELECT * FROM project_trades WHERE trade_code = :trade_code LIMIT 1";
+            $sql = "SELECT t.*, s.description as service_name, s.service_code
+                    FROM project_trades t
+                    LEFT JOIN project_services s ON t.service_id = s.service_id
+                    WHERE t.trade_code = :trade_code LIMIT 1";
             $stmt = $this->db->prepare($sql);
             $stmt->execute([':trade_code' => $trade_code]);
             return $stmt->fetch();
@@ -76,8 +85,8 @@ class Trades extends Model
                 }
             }
 
-            $sql = "INSERT INTO project_trades (trade_code, description, long_description, created_by) 
-                    VALUES (:trade_code, :description, :long_description, :created_by)";
+            $sql = "INSERT INTO project_trades (trade_code, description, long_description, service_id, created_by) 
+                    VALUES (:trade_code, :description, :long_description, :service_id, :created_by)";
 
             $stmt = $this->db->prepare($sql);
 
@@ -85,6 +94,7 @@ class Trades extends Model
                 ':trade_code' => $data['trade_code'] ?? null,
                 ':description' => $data['description'] ?? null,
                 ':long_description' => $data['long_description'] ?? null,
+                ':service_id' => $data['service_id'] ?? null,
                 ':created_by' => $this->getCurrentUserId()
             ]);
 
@@ -115,7 +125,8 @@ class Trades extends Model
             $sql = "UPDATE project_trades 
                     SET trade_code = :trade_code,
                         description = :description,
-                        long_description = :long_description
+                        long_description = :long_description,
+                        service_id = :service_id
                     WHERE trade_id = :trade_id";
 
             $stmt = $this->db->prepare($sql);
@@ -124,6 +135,7 @@ class Trades extends Model
                 ':trade_code' => $data['trade_code'] ?? null,
                 ':description' => $data['description'] ?? null,
                 ':long_description' => $data['long_description'] ?? null,
+                ':service_id' => $data['service_id'] ?? null,
                 ':trade_id' => $data['trade_id']
             ]);
         } catch (\PDOException $e) {

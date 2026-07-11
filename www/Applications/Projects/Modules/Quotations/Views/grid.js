@@ -18,11 +18,11 @@ Ext.define('App.view.quotations.Grid', {
 
     // Store configuration for fetching quotation list
     store: {
-        fields: ['id', 'project_type_desc', 'project_name', 'quot_ctrl_no', 'client_code', 'client_name', 'contact_person', 'terms', 'term_remarks', 'discount', 'remarks', 'status', 'date_created'],
+        fields: ['id', 'service_desc', 'project_name', 'quot_ctrl_no', 'client_code', 'client_name', 'contact_person', 'terms', 'term_remarks', 'discount', 'remarks', 'status', 'date_created'],
         pageSize: 25,
         proxy: {
             type: 'ajax',
-            url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/Quotations/Main/data',
+            url: '<?php echo rtrim(BASE_URL, "/"); ?>/Projects/Quotations/Main/data',
             reader: {
                 type: 'json',
                 rootProperty: 'data',
@@ -39,8 +39,8 @@ Ext.define('App.view.quotations.Grid', {
         width: 50
     },
         {
-            text: 'Project Type',
-            dataIndex: 'project_type_desc',
+            text: 'Service',
+            dataIndex: 'service_desc',
             width: 120
         },
         {
@@ -116,7 +116,7 @@ Ext.define('App.view.quotations.Grid', {
                     Ext.Msg.confirm('Delete', 'Are you sure you want to delete this quotation?', function (choice) {
                         if (choice === 'yes') {
                             Ext.Ajax.request({
-                                url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/Quotations/Main/delete',
+                                url: '<?php echo rtrim(BASE_URL, "/"); ?>/Projects/Quotations/Main/delete',
                                 method: 'POST',
                                 params: {
                                     id: selection[0].get('quot_ctrl_no')

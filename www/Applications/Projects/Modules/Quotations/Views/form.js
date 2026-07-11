@@ -48,7 +48,7 @@ Ext.define('App.view.quotations.Form', {
             }],
             proxy: {
                 type: 'ajax',
-                url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/Quotations/Main/details',
+                url: '<?php echo rtrim(BASE_URL, "/"); ?>/Operations/Quotations/Main/details',
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
@@ -65,7 +65,7 @@ Ext.define('App.view.quotations.Form', {
             }],
             proxy: {
                 type: 'ajax',
-                url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/Quotations/Main/details',
+                url: '<?php echo rtrim(BASE_URL, "/"); ?>/Operations/Quotations/Main/details',
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
@@ -86,7 +86,7 @@ Ext.define('App.view.quotations.Form', {
             }],
             proxy: {
                 type: 'ajax',
-                url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/Quotations/Main/details',
+                url: '<?php echo rtrim(BASE_URL, "/"); ?>/Operations/Quotations/Main/details',
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
@@ -103,7 +103,7 @@ Ext.define('App.view.quotations.Form', {
             }],
             proxy: {
                 type: 'ajax',
-                url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/Quotations/Main/details',
+                url: '<?php echo rtrim(BASE_URL, "/"); ?>/Operations/Quotations/Main/details',
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
@@ -116,7 +116,7 @@ Ext.define('App.view.quotations.Form', {
             fields: ['section', 'description'],
             proxy: {
                 type: 'ajax',
-                url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/Quotations/Main/terms',
+                url: '<?php echo rtrim(BASE_URL, "/"); ?>/Projects/Quotations/Main/terms',
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
@@ -221,7 +221,7 @@ Ext.define('App.view.quotations.Form', {
 
                     // Load building data
                     Ext.Ajax.request({
-                        url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/Quotations/Main/buildings',
+                        url: '<?php echo rtrim(BASE_URL, "/"); ?>/Projects/Quotations/Main/buildings',
                         params: {header_id: me.record.get('id')},
                         success: function (response) {
                             var result = Ext.decode(response.responseText);
@@ -328,7 +328,7 @@ Ext.define('App.view.quotations.Form', {
 
             // Submit data to server
             Ext.Ajax.request({
-                url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/Quotations/Main/save',
+                url: '<?php echo rtrim(BASE_URL, "/"); ?>/Projects/Quotations/Main/save',
                 method: 'POST',
                 params: {
                     header: Ext.encode(headerData),

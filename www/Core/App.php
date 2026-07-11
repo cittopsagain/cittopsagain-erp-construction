@@ -10,8 +10,8 @@ namespace Core;
 class App
 {
     // Default routing values
-    protected $application = 'Projects';
-    protected $module = 'Quotations';
+    protected $application = 'Hr';
+    protected $module = 'EmployeeMasterlist';
     protected $controller = 'Main';
     protected $method = 'index';
     protected $params = [];
@@ -54,7 +54,7 @@ class App
             }
         }
 
-        // 2. Check for Module (e.g., /Hr/Employees/...)
+        // 2. Check for Module (e.g., /Hr/EmployeeMasterlist/...)
         if (isset($url[1])) {
             $moduleName = $url[1];
             // Try as is, then with ucfirst
@@ -78,7 +78,7 @@ class App
             }
         }
 
-        // 3. Check for Controller (e.g., /Hr/Employees/Main/...)
+        // 3. Check for Controller (e.g., /Hr/EmployeeMasterlist/Main/...)
         if (isset($url[2])) {
             $controllerName = ucfirst($url[2]);
             if (preg_match('/^[a-zA-Z0-9_]+$/', $controllerName) && file_exists('Applications/' . $this->application . '/Modules/' . $this->module . '/Controllers/' . $controllerName . '.php')) {
@@ -103,7 +103,7 @@ class App
         $fullControllerName = "\\Applications\\" . $this->application . "\\Modules\\" . $this->module . "\\Controllers\\" . $this->controller;
         $this->controller = new $fullControllerName;
 
-        // 4. Check for Method (e.g., /Hr/Employees/Main/index/...)
+        // 4. Check for Method (e.g., /Hr/EmployeeMasterlist/Main/index/...)
         if (isset($url[3])) {
             if (method_exists($this->controller, $url[3])) {
                 $this->method = $url[3];
