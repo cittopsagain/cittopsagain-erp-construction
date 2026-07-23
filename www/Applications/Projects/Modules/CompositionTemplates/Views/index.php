@@ -619,6 +619,7 @@
         alias: 'widget.composition-template-materials-grid',
         store: {
             fields: ['id', 'template_id', 'detail_type', 'inventory_item_id', 'item_code', 'item_desc', 'seq', 'qty_formula', 'waste_percentage', 'remarks'],
+            pageSize: 25,
             proxy: {
                 type: 'ajax',
                 url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/CompositionTemplates/Main/detailData',
@@ -629,6 +630,10 @@
                 }
             },
             autoLoad: false
+        },
+        bbar: {
+            xtype: 'pagingtoolbar',
+            displayInfo: true
         },
         plugins: {
             ptype: 'rowediting',
@@ -838,7 +843,7 @@
         extend: 'Ext.grid.Panel',
         alias: 'widget.composition-template-labor-grid',
         store: {
-            fields: ['id', 'template_id', 'detail_type', 'role', 'hours', 'rate', 'formula', 'seq'],
+            fields: ['id', 'template_id', 'detail_type', 'role', 'hours', 'rate', 'seq'],
             proxy: {
                 type: 'ajax',
                 url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/CompositionTemplates/Main/detailData',
@@ -950,14 +955,6 @@
                     xtype: 'numberfield',
                     minValue: 0
                 }
-            },
-            {
-                text: 'Formula',
-                dataIndex: 'formula',
-                flex: 1,
-                editor: {
-                    xtype: 'textfield'
-                }
             }
         ],
         tbar: [
@@ -975,8 +972,7 @@
                         detail_type: 'LABOR',
                         role: '',
                         hours: 0,
-                        rate: 0,
-                        formula: ''
+                        rate: 0
                     });
 
                     store.insert(store.getCount(), r);

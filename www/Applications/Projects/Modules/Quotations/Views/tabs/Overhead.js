@@ -29,7 +29,7 @@ Ext.define('App.view.quotations.tabs.Overhead', {
                     fields: ['id', 'code', 'description'],
                     proxy: {
                         type: 'ajax',
-                        url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/OverheadTypes/Main/all',
+                        url: '<?php echo rtrim(BASE_URL, ' / '); ?>/Projects/OverheadCategories/Main/all',
                         reader: {
                             type: 'json',
                             rootProperty: 'data'

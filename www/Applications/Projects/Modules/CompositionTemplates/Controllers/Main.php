@@ -108,18 +108,23 @@ class Main extends Controller
 
     public function detailData()
     {
-        $template_id = $_GET['template_id'] ?? null;
-        $type = $_GET['detail_type'] ?? null;
+        $template_id = $_REQUEST['template_id'] ?? null;
+        $type = $_REQUEST['detail_type'] ?? null;
+        $start = $_REQUEST['start'] ?? null;
+        $limit = $_REQUEST['limit'] ?? null;
+
+        \Core\Logger::log('Template Id: ' . $template_id);
         if (!$template_id) {
             $this->json(['total' => 0, 'data' => []]);
             return;
         }
 
         $model = $this->model('Projects', 'CompositionTemplates', 'CompositionTemplateDetail');
-        $items = $model->getByTemplateId($template_id, $type);
+        $items = $model->getByTemplateId($template_id, $type, $start, $limit);
+        $total = $model->getTotalByTemplateId($template_id, $type);
 
         $this->json([
-            'total' => count($items),
+            'total' => $total,
             'data' => $items
         ]);
     }

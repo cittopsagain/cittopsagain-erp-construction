@@ -88,7 +88,7 @@
         },
         tbar: [
             {
-                text: 'Add Type',
+                text: 'Add Item Type',
                 handler: function () {
                     var grid = this.up('grid');
                     var editing = grid.findPlugin('rowediting');
@@ -106,7 +106,7 @@
                 }
             },
             {
-                text: 'Remove Type',
+                text: 'Remove Item Type',
                 itemId: 'removeType',
                 handler: function () {
                     var grid = this.up('grid');
@@ -117,7 +117,7 @@
 
                     if (selection.length > 0) {
                         var record = selection[0];
-                        Ext.Msg.confirm('Delete', 'Are you sure you want to delete this item type?', function (choice) {
+                        Ext.Msg.confirm('Delete', 'Are you sure you want to delete this item types?', function (choice) {
                             if (choice === 'yes') {
                                 editing.cancelEdit();
                                 if (record.phantom) {
@@ -137,7 +137,7 @@
                                             }
                                         },
                                         failure: function (response) {
-                                            Ext.Msg.alert('Error', 'Failed to delete item type.');
+                                            Ext.Msg.alert('Error', 'Failed to delete item types.');
                                         }
                                     });
                                 }

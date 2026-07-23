@@ -11,12 +11,13 @@ class CompositionTemplate extends Model
     public function getPaged($start, $limit)
     {
         try {
-            $sql = "SELECT t.*, i.installation_method_name, pt.description as trade_name, pwp.description as phase_name, ps.description as system_name
+            $sql = "SELECT t.*, i.installation_method_name, pt.description as trade_name, pwp.description as phase_name, ps.description as system_name, pt.service_id, psrv.description as service_name
                     FROM {$this->table} t
                     LEFT JOIN installation_methods i ON t.installation_method_id = i.installation_method_id
                     LEFT JOIN project_trades pt ON t.trade_id = pt.trade_id
                     LEFT JOIN project_work_phases pwp ON t.phase_id = pwp.phase_id
                     LEFT JOIN project_systems ps ON t.system_id = ps.system_id
+                    LEFT JOIN project_services psrv ON pt.service_id = psrv.service_id
                     ORDER BY t.id DESC 
                     LIMIT :limit OFFSET :offset";
             $stmt = $this->db->prepare($sql);

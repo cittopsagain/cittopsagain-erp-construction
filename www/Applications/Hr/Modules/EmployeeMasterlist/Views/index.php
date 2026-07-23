@@ -69,7 +69,8 @@
             {
                 text: 'Employee Name',
                 dataIndex: 'employee_name',
-                width: 200,
+                flex: 1,
+                minWidth: 200,
                 editor: {
                     xtype: 'textfield',
                     allowBlank: false
@@ -209,7 +210,8 @@
             {
                 text: 'Immediate Supervisor',
                 dataIndex: 'supervisor_id',
-                width: 150,
+                flex: 1,
+                minWidth: 150,
                 renderer: function (val, meta, rec) {
                     return rec.get('supervisor_name');
                 },

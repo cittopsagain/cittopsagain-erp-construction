@@ -10,8 +10,8 @@ namespace Core;
 class App
 {
     // Default routing values
-    protected $application = 'Hr';
-    protected $module = 'EmployeeMasterlist';
+    protected $application = 'Projects';
+    protected $module = 'CostEstimate';
     protected $controller = 'Main';
     protected $method = 'index';
     protected $params = [];

@@ -2,6 +2,6 @@
 
 return [
     'display_name' => 'Overhead Types',
-    'parent' => 'Masterlist',
-    'iconCls' => 'x-fa fa-money'
+    'parent' => 'Cost Libraries',
+    'iconCls' => 'x-fa fa-calculator'
 ];

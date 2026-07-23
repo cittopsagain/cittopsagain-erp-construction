@@ -8,7 +8,7 @@ class Main extends Controller
 {
     public function index()
     {
-        $data['title'] = "Item Type";
+        $data['title'] = "Item Types";
         $data['content_xtype'] = 'item-type-grid';
         $this->layout('Inventory', 'ItemTypes', 'index', $data);
     }
@@ -49,10 +49,10 @@ class Main extends Controller
             $isUpdate = isset($data['id']) && is_numeric($data['id']);
 
             if ($model->save($data)) {
-                $message = $isUpdate ? 'Item type updated successfully.' : 'Item type added successfully.';
+                $message = $isUpdate ? 'Item types updated successfully.' : 'Item types added successfully.';
                 $this->json(['success' => true, 'message' => $message]);
             } else {
-                $message = $isUpdate ? 'Failed to update item type.' : 'Failed to add item type.';
+                $message = $isUpdate ? 'Failed to update item types.' : 'Failed to add item types.';
                 $this->json(['success' => false, 'message' => $message]);
             }
         } catch (\Exception $e) {
@@ -71,9 +71,9 @@ class Main extends Controller
         $model = $this->model('Inventory', 'ItemTypes', 'ItemType');
         try {
             if ($model->delete($id)) {
-                $this->json(['success' => true, 'message' => 'Item type deleted successfully.']);
+                $this->json(['success' => true, 'message' => 'Item types deleted successfully.']);
             } else {
-                $this->json(['success' => false, 'message' => 'Failed to delete item type.']);
+                $this->json(['success' => false, 'message' => 'Failed to delete item types.']);
             }
         } catch (\Exception $e) {
             $this->json(['success' => false, 'message' => $e->getMessage()]);

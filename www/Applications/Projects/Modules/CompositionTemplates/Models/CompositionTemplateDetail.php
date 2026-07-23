@@ -8,7 +8,7 @@ class CompositionTemplateDetail extends Model
 {
     protected $table = 'composition_template_details';
 
-    public function getByTemplateId($template_id, $type = null)
+    public function getByTemplateId($template_id, $type = null, $start = null, $limit = null)
     {
         try {
             $sql = "SELECT d.*, i.item_code, i.item_desc 
@@ -25,13 +25,50 @@ class CompositionTemplateDetail extends Model
 
             $sql .= " ORDER BY d.seq ASC";
 
+            if ($limit !== null && $start !== null) {
+                $sql .= " LIMIT :limit OFFSET :offset";
+                $params[':limit'] = (int)$limit;
+                $params[':offset'] = (int)$start;
+            }
+
+            \Core\Logger::log($sql);
             $stmt = $this->db->prepare($sql);
-            $stmt->execute($params);
+
+            foreach ($params as $key => $value) {
+                if ($key === ':limit' || $key === ':offset') {
+                    $stmt->bindValue($key, $value, \PDO::PARAM_INT);
+                } else {
+                    $stmt->bindValue($key, $value);
+                }
+            }
+
+            $stmt->execute();
             return $stmt->fetchAll();
         } catch (\PDOException $e) {
             error_log($e->getMessage());
             \Core\Logger::logException($e);
             return [];
+        }
+    }
+
+    public function getTotalByTemplateId($template_id, $type = null)
+    {
+        try {
+            $sql = "SELECT COUNT(*) FROM {$this->table} WHERE template_id = :template_id";
+            $params = [':template_id' => $template_id];
+
+            if ($type) {
+                $sql .= " AND detail_type = :type";
+                $params[':type'] = $type;
+            }
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute($params);
+            return (int)$stmt->fetchColumn();
+        } catch (\PDOException $e) {
+            error_log($e->getMessage());
+            \Core\Logger::logException($e);
+            return 0;
         }
     }
 
@@ -50,15 +87,15 @@ class CompositionTemplateDetail extends Model
             $success = $stmt->execute([
                 ':template_id' => $data['template_id'],
                 ':detail_type' => $data['detail_type'] ?? 'MATERIAL',
-                ':inventory_item_id' => $data['inventory_item_id'] ?? null,
-                ':seq' => $data['seq'] ?? 0,
+                ':inventory_item_id' => !empty($data['inventory_item_id']) ? $data['inventory_item_id'] : null,
+                ':seq' => !empty($data['seq']) ? $data['seq'] : 0,
                 ':description' => $data['description'] ?? null,
                 ':qty_formula' => $data['qty_formula'] ?? null,
-                ':waste_percentage' => $data['waste_percentage'] ?? 0,
+                ':waste_percentage' => !empty($data['waste_percentage']) ? $data['waste_percentage'] : 0,
                 ':remarks' => $data['remarks'] ?? null,
                 ':role' => $data['role'] ?? null,
-                ':hours' => $data['hours'] ?? 0,
-                ':rate' => $data['rate'] ?? 0,
+                ':hours' => !empty($data['hours']) ? $data['hours'] : 0,
+                ':rate' => !empty($data['rate']) ? $data['rate'] : 0,
                 ':formula' => $data['formula'] ?? null,
                 ':created_by' => $this->getCurrentUserId()
             ]);
@@ -95,15 +132,15 @@ class CompositionTemplateDetail extends Model
             $stmt = $this->db->prepare($sql);
 
             return $stmt->execute([
-                ':seq' => $data['seq'] ?? 0,
-                ':inventory_item_id' => $data['inventory_item_id'] ?? null,
+                ':seq' => !empty($data['seq']) ? $data['seq'] : 0,
+                ':inventory_item_id' => !empty($data['inventory_item_id']) ? $data['inventory_item_id'] : null,
                 ':description' => $data['description'] ?? null,
                 ':qty_formula' => $data['qty_formula'] ?? null,
-                ':waste_percentage' => $data['waste_percentage'] ?? 0,
+                ':waste_percentage' => !empty($data['waste_percentage']) ? $data['waste_percentage'] : 0,
                 ':remarks' => $data['remarks'] ?? null,
                 ':role' => $data['role'] ?? null,
-                ':hours' => $data['hours'] ?? 0,
-                ':rate' => $data['rate'] ?? 0,
+                ':hours' => !empty($data['hours']) ? $data['hours'] : 0,
+                ':rate' => !empty($data['rate']) ? $data['rate'] : 0,
                 ':formula' => $data['formula'] ?? null,
                 ':modified_by' => $this->getCurrentUserId(),
                 ':id' => $data['id']

@@ -76,7 +76,7 @@ class DatabaseFixer
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 
-            'sales_overhead_types' => "CREATE TABLE IF NOT EXISTS `sales_overhead_types` (
+            'project_overhead_categories' => "CREATE TABLE IF NOT EXISTS `project_overhead_categories` (
                 `id` int(11) NOT NULL AUTO_INCREMENT,
                 `code` varchar(50) NOT NULL,
                 `description` varchar(255) DEFAULT NULL,
@@ -190,6 +190,138 @@ class DatabaseFixer
                 `description` text DEFAULT NULL,
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+
+            'project_markup_categories' => "CREATE TABLE IF NOT EXISTS `project_markup_categories` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `code` varchar(50) NOT NULL,
+                `description` varchar(255) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                UNIQUE KEY `idx_code` (`code`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+
+            'project_markup_types' => "CREATE TABLE IF NOT EXISTS `project_markup_types` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `code` varchar(50) NOT NULL,
+                `markup_type` varchar(255) NOT NULL,
+                `category` varchar(100) DEFAULT NULL,
+                `calculation_method` varchar(255) DEFAULT NULL,
+                `purpose` text DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                UNIQUE KEY `idx_code` (`code`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+
+            'project_overhead_types' => "CREATE TABLE IF NOT EXISTS `project_overhead_types` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `code` varchar(50) NOT NULL,
+                `overhead_type` varchar(255) NOT NULL,
+                `category` varchar(100) DEFAULT NULL,
+                `calculation_method` varchar(255) DEFAULT NULL,
+                `default_rate` decimal(15,2) DEFAULT 0.00,
+                PRIMARY KEY (`id`),
+                UNIQUE KEY `idx_code` (`code`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+
+            'boq_headers' => "CREATE TABLE IF NOT EXISTS `boq_headers` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `boq_no` varchar(50) NOT NULL,
+                `project_name` varchar(255) DEFAULT NULL,
+                `client_code` varchar(50) DEFAULT NULL,
+                `location` varchar(255) DEFAULT NULL,
+                `revision` varchar(20) DEFAULT 'Rev. 0',
+                `status` varchar(50) DEFAULT 'Draft',
+                `remarks` text DEFAULT NULL,
+                `service_id` int(11) DEFAULT NULL,
+                `system_id` int(11) DEFAULT NULL,
+                `trade_id` int(11) DEFAULT NULL,
+                `installation_method_id` int(11) DEFAULT NULL,
+                `phase_id` int(11) DEFAULT NULL,
+                `composition_template_id` int(11) DEFAULT NULL,
+                `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+                `created_by` int(11) DEFAULT NULL,
+                `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+                `updated_by` int(11) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                UNIQUE KEY `boq_no` (`boq_no`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+
+            'boq_details' => "CREATE TABLE IF NOT EXISTS `boq_details` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `boq_id` int(11) NOT NULL,
+                `composition_template_id` int(11) DEFAULT NULL,
+                `location_id` int(11) DEFAULT NULL,
+                `service_id` int(11) DEFAULT NULL,
+                `trade_id` int(11) DEFAULT NULL,
+                `system_id` int(11) DEFAULT NULL,
+                `installation_method_id` int(11) DEFAULT NULL,
+                `description` text DEFAULT NULL,
+                `quantity` decimal(15,4) DEFAULT 0.0000,
+                PRIMARY KEY (`id`),
+                KEY `idx_boq_id` (`boq_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+
+            'location_types' => "CREATE TABLE IF NOT EXISTS `location_types` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `code` varchar(50) NOT NULL,
+                `name` varchar(100) NOT NULL,
+                `parent_allowed` varchar(255) DEFAULT NULL,
+                `description` text,
+                `active` tinyint(1) DEFAULT 1,
+                PRIMARY KEY (`id`),
+                UNIQUE KEY `idx_location_types_code` (`code`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+
+            'project_locations' => "CREATE TABLE IF NOT EXISTS `project_locations` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `code` varchar(50) NOT NULL,
+                `name` varchar(100) NOT NULL,
+                `type_id` int(11) DEFAULT NULL,
+                `parent_id` int(11) DEFAULT NULL,
+                `boq_id` int(11) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                UNIQUE KEY `idx_project_locations_code_boq` (`code`, `boq_id`),
+                KEY `idx_project_locations_type_id` (`type_id`),
+                KEY `idx_project_locations_parent_id` (`parent_id`),
+                KEY `idx_project_locations_boq_id` (`boq_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+
+            'composition_templates' => "CREATE TABLE IF NOT EXISTS `composition_templates` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `template_code` varchar(50) NOT NULL,
+                `template_name` varchar(255) NOT NULL,
+                `installation_method_id` int(11) DEFAULT NULL,
+                `trade_id` int(11) DEFAULT NULL,
+                `phase_id` int(11) DEFAULT NULL,
+                `system_id` int(11) DEFAULT NULL,
+                `service_id` int(11) DEFAULT NULL,
+                `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+                `created_by` int(11) DEFAULT NULL,
+                `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+                `updated_by` int(11) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                UNIQUE KEY `template_code` (`template_code`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+
+            'composition_template_details' => "CREATE TABLE IF NOT EXISTS `composition_template_details` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `template_id` int(11) NOT NULL,
+                `detail_type` ENUM('MATERIAL', 'LABOR') DEFAULT 'MATERIAL',
+                `inventory_item_id` int(11) DEFAULT NULL,
+                `seq` int(11) NOT NULL DEFAULT 0,
+                `description` varchar(255) DEFAULT NULL,
+                `qty_formula` text DEFAULT NULL,
+                `waste_percentage` decimal(10,2) DEFAULT 0.00,
+                `remarks` text DEFAULT NULL,
+                `role` varchar(255) DEFAULT NULL,
+                `hours` decimal(10,2) DEFAULT 0.00,
+                `rate` decimal(10,2) DEFAULT 0.00,
+                `formula` text DEFAULT NULL,
+                `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+                `created_by` int(11) DEFAULT NULL,
+                `updated_at` timestamp NULL DEFAULT NULL,
+                `updated_by` int(11) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `template_id` (`template_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
         ];
 
         foreach ($tables as $name => $sql) {
@@ -218,6 +350,25 @@ class DatabaseFixer
         $this->checkAndAddColumn('sales_quotation_details', 'overhead_computation_type', "VARCHAR(20) DEFAULT 'Fixed'");
         $this->checkAndAddColumn('sales_quotation_details', 'overhead_value', "DECIMAL(15, 2) DEFAULT 0.00");
         $this->checkAndAddColumn('sales_quotation_details', 'total_price', "DECIMAL(15, 2) DEFAULT 0.00");
+
+        $this->checkAndAddColumn('boq_details', 'service_id', "INT DEFAULT NULL");
+        $this->checkAndAddColumn('boq_details', 'trade_id', "INT DEFAULT NULL");
+        $this->checkAndAddColumn('boq_details', 'system_id', "INT DEFAULT NULL");
+        $this->checkAndAddColumn('boq_details', 'installation_method_id', "INT DEFAULT NULL");
+        $this->checkAndAddColumn('boq_details', 'location_id', "INT DEFAULT NULL");
+        $this->checkAndAddColumn('project_locations', 'boq_id', "INT DEFAULT NULL");
+
+        // Fix unique key for project_locations
+        try {
+            $this->db->exec("ALTER TABLE `project_locations` DROP INDEX `idx_project_locations_code` ");
+        } catch (PDOException $e) {
+            // Key might not exist
+        }
+        try {
+            $this->db->exec("ALTER TABLE `project_locations` ADD UNIQUE KEY `idx_project_locations_code_boq` (`code`, `boq_id`) ");
+        } catch (PDOException $e) {
+            // Key might already exist
+        }
     }
 
     private function checkAndAddColumn($table, $column, $definition)

@@ -8,7 +8,7 @@
         draggable: true,
         resizable: true,
         store: {
-            fields: ['id', 'code', 'description'],
+            fields: ['id', 'code', 'overhead_type', 'category', 'calculation_method', 'default_rate'],
             pageSize: 25,
             proxy: {
                 type: 'ajax',
@@ -59,19 +59,61 @@
             {
                 text: 'Code',
                 dataIndex: 'code',
-                width: 150,
+                width: 100,
                 editor: {
                     xtype: 'textfield',
                     allowBlank: false
                 }
             },
             {
-                text: 'Description',
-                dataIndex: 'description',
+                text: 'Overhead Type',
+                dataIndex: 'overhead_type',
                 flex: 1,
+                minWidth: 200,
                 editor: {
                     xtype: 'textfield',
                     allowBlank: false
+                }
+            },
+            {
+                text: 'Category',
+                dataIndex: 'category',
+                width: 150,
+                editor: {
+                    xtype: 'combobox',
+                    store: {
+                        proxy: {
+                            type: 'ajax',
+                            url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/OverheadCategories/Main/all',
+                            reader: {type: 'json', rootProperty: 'data'}
+                        },
+                        autoLoad: true
+                    },
+                    displayField: 'description',
+                    valueField: 'description',
+                    queryMode: 'local',
+                    allowBlank: false
+                }
+            },
+            {
+                text: 'Calculation Method',
+                dataIndex: 'calculation_method',
+                width: 180,
+                editor: {
+                    xtype: 'combobox',
+                    store: ['% of Labor', '% of Total Cost', 'Fixed Amount', 'Actual Cost', '% of Equipment Cost', '% of Direct Cost'],
+                    allowBlank: false
+                }
+            },
+            {
+                text: 'Default Rate',
+                dataIndex: 'default_rate',
+                width: 120,
+                renderer: Ext.util.Format.numberRenderer('0,000.00'),
+                editor: {
+                    xtype: 'numberfield',
+                    decimalPrecision: 2,
+                    minValue: 0
                 }
             }
         ],
@@ -93,7 +135,10 @@
 
                     var r = Ext.create(store.getModel(), {
                         code: '',
-                        description: ''
+                        overhead_type: '',
+                        category: '',
+                        calculation_method: '',
+                        default_rate: 0
                     });
 
                     store.insert(0, r);

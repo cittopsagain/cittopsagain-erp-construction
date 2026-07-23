@@ -113,18 +113,18 @@ Ext.define('App.view.quotations.tabs.BOQ', {
                                     var rowEditing = combo.up('grid').findPlugin('rowediting');
                                     var editRecord = rowEditing ? rowEditing.context.record : null;
                                     if (editRecord) {
-                                        editRecord.set('component_description', record.get('description'));
-                                        editRecord.set('component_code', record.get('component_code'));
-                                        editRecord.set('project_component_code', record.get('component_code'));
-                                        editRecord.set('component_id', record.get('component_id'));
+                                        editRecord.set('component_description', record.get('item_desc'));
+                                        editRecord.set('component_code', record.get('item_code'));
+                                        editRecord.set('project_component_code', record.get('item_code'));
+                                        editRecord.set('component_id', record.get('item_id'));
                                     }
                                 }
                             },
                             store: {
-                                fields: ['component_id', 'component_code', 'description'],
+                                fields: ['item_id', 'item_code', 'item_desc'],
                                 proxy: {
                                     type: 'ajax',
-                                    url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/ProjectComponents/Main/all',
+                                    url: '<?php echo rtrim(BASE_URL, ' / '); ?>/Inventory/Items/Main/data',
                                     reader: {
                                         type: 'json',
                                         rootProperty: 'data'
@@ -132,8 +132,8 @@ Ext.define('App.view.quotations.tabs.BOQ', {
                                 },
                                 autoLoad: true
                             },
-                            valueField: 'component_code',
-                            displayField: 'description',
+                            valueField: 'item_code',
+                            displayField: 'item_desc',
                             queryMode: 'local',
                             matchFieldWidth: false,
                             listConfig: {
@@ -165,12 +165,12 @@ Ext.define('App.view.quotations.tabs.BOQ', {
 
                                             // If component_id is not in record, try to find it in the store
                                             if (!component_id && component_code) {
-                                                var combo = editor.up('grid').down('combobox[displayField=description]');
+                                                var combo = editor.up('grid').down('combobox[displayField=item_desc]');
                                                 if (combo && combo.getStore()) {
-                                                    var compRec = combo.getStore().findRecord('component_code', component_code);
+                                                    var compRec = combo.getStore().findRecord('item_code', component_code);
                                                     if (compRec) {
-                                                        component_id = compRec.get('component_id');
-                                                        component_description = compRec.get('description');
+                                                        component_id = compRec.get('item_id');
+                                                        component_description = compRec.get('item_desc');
                                                         record.set('component_id', component_id);
                                                         record.set('component_description', component_description);
                                                     }
@@ -263,7 +263,7 @@ Ext.define('App.view.quotations.tabs.BOQ', {
                                 fields: ['unit_code', 'description'],
                                 proxy: {
                                     type: 'ajax',
-                                    url: '<?php echo rtrim(BASE_URL, '/'); ?>/Inventory/Units/Main/all',
+                                    url: '<?php echo rtrim(BASE_URL, ' / '); ?>/Inventory/Units/Main/all',
                                     reader: {
                                         type: 'json',
                                         rootProperty: 'data'

@@ -36,7 +36,7 @@ Ext.define('App.view.quotations.ItemWindow', {
             ],
             proxy: {
                 type: 'ajax',
-                url: '<?php echo rtrim(BASE_URL, '/'); ?>/Inventory/Items/Main/data',
+                url: '<?php echo rtrim(BASE_URL, ' / '); ?>/Inventory/Items/Main/data',
                 reader: {
                     type: 'json',
                     rootProperty: 'data',
@@ -143,38 +143,8 @@ Ext.define('App.view.quotations.ItemWindow', {
 
         me.callParent(arguments);
 
-        if (me.component_id) {
-            // Check if project component items exist
-            Ext.Ajax.request({
-                url: '<?php echo rtrim(BASE_URL, '/'); ?>/Projects/ProjectComponents/Main/itemsData',
-                method: 'GET',
-                params: {
-                    component_id: me.component_id,
-                    limit: 1
-                },
-                success: function (response) {
-                    var result = Ext.decode(response.responseText);
-                    if (result.total > 0) {
-                        // Use Project Component Items
-                        itemStore.getProxy().setUrl('/Projects/ProjectComponents/Main/itemsData');
-                        itemStore.getProxy().setExtraParam('component_id', me.component_id);
-                        me.setTitle('Select Item (Project Component: ' + (me.component_description || me.component_code || me.component_id) + ')');
-                    } else {
-                        // Fallback to Inventory Items
-                        itemStore.getProxy().setUrl('/Inventory/Items/Main/data');
-                    }
-                    itemStore.loadPage(1);
-                },
-                failure: function () {
-                    // Fallback to Inventory Items on error
-                    itemStore.getProxy().setUrl('/Inventory/Items/Main/data');
-                    itemStore.loadPage(1);
-                }
-            });
-        } else {
-            // No component selected, use Inventory Items
-            itemStore.loadPage(1);
-        }
+        // No component selected, use Inventory Items
+        itemStore.loadPage(1);
     },
 
     doSelect: function (record) {

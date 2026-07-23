@@ -37,8 +37,8 @@ class Main extends Controller
             return;
         }
 
-        if (empty($data['description'])) {
-            $this->json(['success' => false, 'message' => 'Description is required.']);
+        if (empty($data['overhead_type'])) {
+            $this->json(['success' => false, 'message' => 'Overhead type is required.']);
             return;
         }
 
@@ -72,15 +72,5 @@ class Main extends Controller
         } catch (\Exception $e) {
             $this->json(['success' => false, 'message' => $e->getMessage()]);
         }
-    }
-
-    public function all()
-    {
-        $model = $this->model('Projects', 'OverheadTypes', 'OverheadTypes');
-        $data = $model->all();
-        $this->json([
-            'success' => true,
-            'data' => $data
-        ]);
     }
 }

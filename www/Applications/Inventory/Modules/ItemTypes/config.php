@@ -1,16 +1,16 @@
 <?php
 return [
-    'display_name' => 'Item Type',
+    'display_name' => 'Item Types',
     'parent' => 'Masterlist',
     'iconCls' => 'x-fa fa-th-list',
     'permissions' => [
         'module' => [
             [
-                'Item Type' => [
+                'Item Types' => [
                     ['action' => 'View Item Types'],
-                    ['action' => 'Create Item Type'],
-                    ['action' => 'Edit Item Type'],
-                    ['action' => 'Delete Item Type']
+                    ['action' => 'Create Item Types'],
+                    ['action' => 'Edit Item Types'],
+                    ['action' => 'Delete Item Types']
                 ]
             ]
         ]

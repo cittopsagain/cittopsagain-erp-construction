@@ -87,8 +87,32 @@
                                         var div = document.createElement('div');
                                         div.innerHTML = data.content_html;
                                         var scripts = div.getElementsByTagName('script');
+                                        var head = document.getElementsByTagName('head')[0];
+
                                         for (var i = 0; i < scripts.length; i++) {
-                                            eval(scripts[i].text);
+                                            var script = document.createElement('script');
+                                            script.type = 'text/javascript';
+                                            if (scripts[i].src) {
+                                                // Check if script is already loaded to avoid duplicates
+                                                if (document.querySelector('script[src="' + scripts[i].src + '"]')) {
+                                                    continue;
+                                                }
+                                                script.src = scripts[i].src;
+                                                // Using sync request for external scripts to ensure they are loaded before component creation
+                                                try {
+                                                    var xhr = new XMLHttpRequest();
+                                                    xhr.open('GET', scripts[i].src, false); // false makes it synchronous
+                                                    xhr.send(null);
+                                                    if (xhr.status === 200) {
+                                                        script.text = xhr.responseText;
+                                                    }
+                                                } catch (e) {
+                                                    console.error('Failed to load script: ' + scripts[i].src, e);
+                                                }
+                                            } else {
+                                                script.text = scripts[i].text;
+                                            }
+                                            head.appendChild(script);
                                         }
                                     }
 
